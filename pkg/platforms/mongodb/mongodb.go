@@ -8,9 +8,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func GetDatabase() *mongo.Database  {
+func GetDatabase() *mongo.Database {
 	ctx := context.Background()
-	if client, err := mongo.NewClient(options.Client().ApplyURI("")); err != nil {
+	if client, err := mongo.NewClient(options.Client().ApplyURI("mongodb+srv://aslan:aslanluonG#69@aslan.dx4zu.gcp.mongodb.net/aslango?retryWrites=true&w=majority")); err != nil {
 		fmt.Println(err)
 	} else {
 		if err := client.Connect(ctx); err != nil {
@@ -21,7 +21,7 @@ func GetDatabase() *mongo.Database  {
 	return nil
 }
 
-func GetClient() *mongo.Client  {
+func GetClient() *mongo.Client {
 	ctx := context.Background()
 	if client, err := mongo.NewClient(options.Client().ApplyURI("")); err != nil {
 		fmt.Println(err)
