@@ -47,7 +47,7 @@ type EnvVars struct {
 func LoadEnvVars() {
 	env, err := ioutil.ReadFile("./env.yaml")
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	var envVars map[string]interface{}
