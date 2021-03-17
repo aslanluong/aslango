@@ -3,6 +3,7 @@ package mongodb
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -10,7 +11,7 @@ import (
 
 func GetDatabase() *mongo.Database {
 	ctx := context.Background()
-	if client, err := mongo.NewClient(options.Client().ApplyURI("mongodb+srv://aslan:aslanluonG#69@aslan.dx4zu.gcp.mongodb.net/aslango?retryWrites=true&w=majority")); err != nil {
+	if client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("mongodb.uri"))); err != nil {
 		fmt.Println(err)
 	} else {
 		if err := client.Connect(ctx); err != nil {
