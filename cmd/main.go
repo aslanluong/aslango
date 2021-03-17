@@ -34,7 +34,11 @@ func main() {
 		w.Write([]byte("Oops, nothing here :("))
 	})
 
-	http.ListenAndServe(":9999", r)
+	if port, ok := os.LookupEnv("PORT"); ok {
+		http.ListenAndServe(":"+port, r)
+	} else {
+		http.ListenAndServe(":9999", r)
+	}
 }
 
 type EnvVars struct {
