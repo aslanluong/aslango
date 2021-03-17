@@ -1,1 +1,1 @@
-web: aslango
+web: bin/cmd
