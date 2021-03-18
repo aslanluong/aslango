@@ -49,7 +49,7 @@ func getShortLink(w http.ResponseWriter, r *http.Request) {
 }
 
 func goShortLink(w http.ResponseWriter, r *http.Request) {
-	if link, err := api.GetOriginalLink(r.RequestURI[4:]); err != nil {
+	if link, err := api.GetOriginalLink(chi.URLParam(r, "*")); err != nil {
 		json.NewEncoder(w).Encode(ErrorResponse{
 			Status: 404,
 			Error:  "Short link not found!",
