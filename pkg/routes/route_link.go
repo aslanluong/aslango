@@ -3,7 +3,10 @@ package routes
 import (
 	"aslango/pkg/api"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"regexp"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -18,8 +21,31 @@ type ErrorResponse struct {
 	Error  string `bson:"error" json:"error"`
 }
 
+type ShortLinkResponse struct {
+	Status    int    `json:"status"`
+	ShortLink string `json:"short_link"`
+}
+
 func getShortLink(w http.ResponseWriter, r *http.Request) {
-	// domalnRegex := `https:\/\/(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?![-_])(?:[-\w\u00a1-\uffff]{0,63}[^-_]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?`
+	originalLink := chi.URLParam(r, "*")
+	if match, _ := regexp.MatchString("https://.+", originalLink); !match {
+		json.NewEncoder(w).Encode(ErrorResponse{
+			Status: 400,
+			Error:  "This link is not supported yet!",
+		})
+		return
+	}
+
+	link, err := api.GenerateShortLink(originalLink)
+	if err != nil {
+		fmt.Println("error")
+		return
+	}
+	shortLink := r.Host + strings.Replace(r.RequestURI, chi.RouteContext(r.Context()).RoutePath, "/"+link.ShortLink, 1)
+	json.NewEncoder(w).Encode(ShortLinkResponse{
+		Status:    200,
+		ShortLink: shortLink,
+	})
 }
 
 func goShortLink(w http.ResponseWriter, r *http.Request) {

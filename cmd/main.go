@@ -16,8 +16,6 @@ import (
 )
 
 func main() {
-	LoadEnvVars()
-
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
@@ -34,10 +32,15 @@ func main() {
 		w.Write([]byte("Oops, nothing here :("))
 	})
 
-	if port, ok := os.LookupEnv("PORT"); ok {
+	listenAndServe := func(port string) {
+		LoadEnvVars()
 		http.ListenAndServe(":"+port, r)
+	}
+
+	if port, ok := os.LookupEnv("PORT"); ok {
+		listenAndServe(port)
 	} else {
-		http.ListenAndServe(":9999", r)
+		listenAndServe("9999")
 	}
 }
 
