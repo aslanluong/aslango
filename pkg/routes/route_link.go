@@ -12,6 +12,7 @@ import (
 )
 
 func LinkRoute(r chi.Router) {
+	r.Use(cacheMiddleware)
 	r.Get("/create/*", getShortLink)
 	r.Get("/*", goShortLink)
 }
@@ -58,4 +59,11 @@ func goShortLink(w http.ResponseWriter, r *http.Request) {
 		api.UpdateLinkActive(link.LinkId)
 		http.Redirect(w, r, link.OriginalLink, http.StatusMovedPermanently)
 	}
+}
+
+func cacheMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "max-age=43200,s-maxage=43200")
+		next.ServeHTTP(w, r)
+	})
 }
