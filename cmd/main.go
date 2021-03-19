@@ -46,7 +46,7 @@ func main() {
 
 type EnvVars struct {
 	Environment string `yaml:"APP_ENV"`
-	Mongo       struct {
+	MongoDB     struct {
 		Uri string `yaml:"uri"`
 	}
 }
@@ -81,7 +81,7 @@ func LoadEnvVars() {
 			}
 		}
 		setEnvVars("", envVars)
-		os.Setenv("ENV_UNMARSHAL_STRING", string([]byte(env)))
+		os.Setenv("ENV_UNMARSHAL_STRING", string(env))
 	}
 }
 
