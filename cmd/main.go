@@ -81,15 +81,5 @@ func LoadEnvVars() {
 			}
 		}
 		setEnvVars("", envVars)
-		os.Setenv("ENV_UNMARSHAL_STRING", string(env))
 	}
-}
-
-func GetEnvVars() *EnvVars {
-	env := os.Getenv("ENV_UNMARSHAL_STRING")
-	envVars := &EnvVars{}
-	if err := yaml.Unmarshal([]byte(env), &envVars); err != nil {
-		fmt.Println("fail", err)
-	}
-	return envVars
 }
